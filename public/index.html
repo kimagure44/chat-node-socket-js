@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHAT</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="notification hidden">
+    <p></p>
+  </div>
+  <div class="container">
+    <div class="columns">
+      <div class="column is-one-quarter mt-6">
+        <div class="card  has-background-black">
+          <div class="card-content">
+            <div class="media mb-0">
+              <div class="media-content">
+                <p class="title is-6 has-text-white">Usuarios conectados</p>
+                <hr>
+              </div>
+            </div>
+            <div class="content has-text-white" id="userConnected">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="tabs is-boxed pt-6 mb-0">
+          <ul>
+            <li id="tabGeneral" data-content="chatGeneral">
+              <a class="active">
+                <span class="has-text-white">General</span>
+                <i class="fas fa-comment newMessage hide"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="columns">
+          <div class="column container-chats pb-0">
+            <div id="chatGeneral" class="chat textarea content-tab"></div>
+            <div class="info-input"></div>
+          </div>
+        </div>
+        <div class="columns is-mobile">
+          <div class="column is-one-quarter pr-0 pt-1">
+            <input class="input has-text-white has-background-black" type="text" id="user" placeholder="Usuario">
+          </div>
+          <div class="column ml-1 mt-1 mr-3">
+            <div class="columns is-mobile">
+              <input class="input has-text-white has-background-black" type="text" id="message" placeholder="Mensaje" title="Subir fichero">
+              <form>
+                <button class="button is-info" id="btnUploadFile">
+                  <i class="fas fa-file-upload"></i>
+                  <input class="file-input" type="file" name="uploadFile" accept="image/x-png,image/gif,image/jpeg">
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="columns is-mobile hidden" id="container-progress">
+          <div class="column">
+            <progress id="upload-progress-bar" max="100" value="0">0</progress>
+            <div class="info-progress" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./index.js"></script>
+</body>
+</html>

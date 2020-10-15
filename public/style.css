@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+html {
+  overflow: hidden;
+}
+body {
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: #354b52;
+  color: #ffffff;
+  overflow: hidden;
+}
+input {
+  padding: 10px;
+  font-size: 14px;
+}
+.chat {
+  width: 100%;
+  height: 250px;
+  padding: 10px;
+  font-size: 14px;
+  overflow-y: auto;
+  border: 1px solid #dddddd;
+  background: #000000;
+  color: #ffffff;
+  resize: none !important;
+}
+.info-input {
+  font-size: 11px;
+  position: relative;
+  left: 10px;
+  top: -5px;
+}
+.disabled {
+  pointer-events: none;
+  color: #aaaaaa !important;
+}
+.chat-user {
+  font-weight: bold;
+  margin-right: 5px;
+}
+::placeholder {
+  color: #ffffff !important;
+  opacity: .3 !important;
+}
+.chat::-webkit-scrollbar,
+#userConnected::-webkit-scrollbar,
+.tabs ul::-webkit-scrollbar {
+  width: 10px;
+}
+.chat::-webkit-scrollbar-track,
+#userConnected::-webkit-scrollbar-track,
+.tabs ul::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+.chat::-webkit-scrollbar-thumb,
+#userConnected::-webkit-scrollbar-thumb,
+.tabs ul::-webkit-scrollbar-thumb {
+  background: #777777;       
+  border-radius: 3px;
+}
+.chat::-webkit-scrollbar-thumb:hover,
+#userConnected::-webkit-scrollbar-thumb:hover,
+.tabs ul::-webkit-scrollbar-thumb:hover {
+  background: #ffffff; 
+  cursor: pointer;
+}
+.tabs ul {
+  border-bottom: 0 !important;
+  font-size: 14px;
+  overflow: auto;
+}
+.tabs.is-boxed a:hover, .active {
+  background-color: #000000;
+  border: 1px solid #ffffff;
+}
+.container-chats .info-input {
+  text-align: right;
+  left: 0;
+  top: 0px;
+  height: 15px;
+}
+.hide {
+  display: none;
+}
+.card {
+  border: 1px solid #dddddd;
+  max-height: 343px;
+  height: 343px;
+}
+.notification {
+  transition: 300ms ease-in-out;
+  position: fixed;
+  bottom: -24px;
+  width: 100%;
+  opacity: 1;
+  z-index: 10;
+}
+.notification.hidden {
+  transition: 300ms ease-in-out;
+  bottom: -100px;
+  opacity: 0;
+  z-index: -1;
+}
+#userConnected {
+  overflow-y: auto;
+  max-height: 225px;
+  height: 225px;
+}
+#userConnected .chat-user {
+  cursor: pointer !important;
+}
+@media (max-width: 768px) {
+  .tabs  {
+    padding-top: 0px !important;
+  }
+}
+.newMessage {
+  font-size: 11px;
+  left: 5px;
+  position: relative;
+  color: #2196F3;
+}
+.closeChat {
+  position: relative;
+  left: 12px;
+  top: -11px;
+  color: #d46a10;
+  font-size: 10px;
+}
+@media all and (max-width: 1023px) {
+  .container {
+    max-width: 960px;
+    margin-left: 32px !important;
+    margin-right: 32px !important;
+  }
+}
+progress {
+  width: 100%;
+  position: relative;
+  bottom: 25px;
+  transition: 200ms ease-in-out;
+  opacity: 1;
+}
+.info-progress {
+  font-size: 11px;
+  text-align: right;
+  width: 100%;
+  bottom: 30px;
+  position: relative;
+}
+.hidden {
+  opacity: 0;
+  transition: 200ms ease-in-out;
+}
