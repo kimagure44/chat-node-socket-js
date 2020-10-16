@@ -1,5 +1,6 @@
 /**
  * @URL {get} http://tecnops.es:13257/
+ * cmd: node ./sockets/server.js
  */
 const express = require('express');
 const app = express();
