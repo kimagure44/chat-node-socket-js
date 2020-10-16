@@ -20,7 +20,7 @@ const LITERAL = {
 const closeChat = selectorID => {
   document.querySelector(`.tabs ul li[data-content='${selectorID}']`).removeEventListener('click', selectedChat);
   document.querySelector(`.tabs ul li[data-content='${selectorID}']`).remove();
-  document.querySelector(`.container-chats #${selectorID}`).remove();
+  document.querySelector(`.containerChats #${selectorID}`).remove();
   document.querySelector(`li[data-content='chatGeneral']`).click();
 };
 
@@ -35,7 +35,7 @@ const chatTo = data => {
       document.querySelectorAll('.tabs ul li').forEach(item => {
         item.children[0].classList.remove('active');
       });
-      document.querySelectorAll('.container-chats .chat').forEach(item => {
+      document.querySelectorAll('.containerChats .chat').forEach(item => {
         item.classList.add('hide');
       });
       const chat = document.createElement('div');
@@ -45,13 +45,13 @@ const chatTo = data => {
       const iNewChat = document.createElement('i');
       const iCloseChat = document.createElement('i');
       chat.setAttribute('id', selectorID);
-      chat.classList.add('chat','textarea', 'content-tab');
-      document.querySelector('.container-chats').prepend(chat);
+      chat.classList.add('chat','textarea', 'contentTab');
+      document.querySelector('.containerChats').prepend(chat);
       li.setAttribute('data-content', selectorID.toString());
       li.setAttribute('data-idUser', selectorIdUser.toString());
       a.classList.add('active');
       span.style.color = data.color;
-      span.classList.add('has-text-white', 'chat-user');
+      span.classList.add('has-text-white', 'chatUser');
       span.innerHTML = selectorUser;
       a.appendChild(span);
       iNewChat.classList.add('fas', 'fa-comment', 'newMessage', 'hide');
@@ -70,7 +70,7 @@ const chatTo = data => {
 
 // Seleccionar el chat para hablar
 const selectedChat = evt => {
-  document.querySelectorAll('.container-chats .chat').forEach(item => {
+  document.querySelectorAll('.containerChats .chat').forEach(item => {
     item.classList.add('hide');
   });
   const showChat = evt.currentTarget.dataset['content'];
@@ -103,12 +103,12 @@ const sendMessage = (evt, status) => {
         message: message.value
       };
       if (content !== CHAT_GENERAL) {
-        const color = document.querySelector(`#userConnected .chat-user[data-idhtml='${user.dataset.idhtml}']`).style.color;
-        const messageSend = document.querySelector(`.container-chats #${content}`);
+        const color = document.querySelector(`#userConnected .chatUser[data-idhtml='${user.dataset.idhtml}']`).style.color;
+        const messageSend = document.querySelector(`.containerChats #${content}`);
         const div = document.createElement('div');
         const span = document.createElement('span');
         span.style.color = color;
-        span.classList.add('chat-user');
+        span.classList.add('chatUser');
         span.appendChild(document.createTextNode(`${infoMensaje.userOrigen}:`));
         div.appendChild(span);
         div.innerHTML += infoMensaje.message;
@@ -130,7 +130,7 @@ const sendMessage = (evt, status) => {
 
 // Muestra texto indicando quien esta escribiendo
 const clientBeenWriting = payload => {
-  document.querySelector('.container-chats .info-input').innerHTML = payload;
+  document.querySelector('.containerChats .infoInput').innerHTML = payload;
 };
 
 // Añade en el chat general los mensajes
@@ -151,7 +151,7 @@ const reciveMessage = data => {
     const div = document.createElement('div');
     const span = document.createElement('span');
     span.style.color = color;
-    span.classList.add('chat-user');
+    span.classList.add('chatUser');
     span.appendChild(document.createTextNode(`${userOrigen}:`));
     div.appendChild(span);
     div.innerHTML += message;
@@ -172,7 +172,7 @@ const registerUser = payload => {
   payload.forEach(item => {
     const div = document.createElement('div');
     div.style.color = item.color;
-    div.classList.add('chat-user');
+    div.classList.add('chatUser');
     div.onclick = () => { chatTo(item); };
     div.setAttribute('data-idUser', item.idUser);
     div.setAttribute('data-idHTML', item.idHTML);
@@ -228,7 +228,7 @@ const uploadProgress = data => {
 // Cargamos un fichero y se sube al servidor
 const upload = async evt => {
   if (user.value.length >= LENGTH_MIN_USERNAME) {
-    const uploadProgress = document.querySelector('#container-progress');
+    const uploadProgress = document.querySelector('#containerProgress');
     uploadProgress.classList.remove('hidden');
     const btnUploadFile = document.querySelector('#btnUploadFile');
     btnUploadFile.classList.add('is-loading');
