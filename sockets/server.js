@@ -39,7 +39,7 @@ app.post('/upload-file', (req, res) => {
   form.on('fileBegin',(field, file) => {
     console.log(file, field);
     if (MIME_TYPE.includes(file.type) && file.type.length < 20) {
-      file.path = path.join(__dirname, '../public/upload-file', file.name);
+      file.path = path.join(__dirname, '/public/upload-file', file.name);
       fileName = file.name;
       error = false;
     }
