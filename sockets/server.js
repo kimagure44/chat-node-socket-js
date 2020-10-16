@@ -4,8 +4,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const formidable = require('formidable');
 const path = require('path');
-const fs = require('fs');
-const PORT = process.PORT || 5000;
+const PORT = process.PORT || 13257;
 const showPort = () => `listening on *:${PORT}`;
 let users = [];
 const chats = [];
@@ -27,7 +26,7 @@ const hex = () => (Math.floor(Math.random() * 130) + 125).toString(16);
 const newColor = () => `#${hex()}${hex()}${hex()}`;
 
 // Para servir los ficheros de la carpeta 'public'
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 
 // Endpoint para la subida de ficheros
 app.post('/upload-file', (req, res) => {
