@@ -1,3 +1,4 @@
+// Definición de constantes y variables para la gestión del chat
 let socket = null;
 let user = null;
 let message = null;
@@ -5,7 +6,6 @@ let usersPanel = null;
 let notification = null;
 let uploadFile = null;
 let webrtc = null;
-
 const CHAT_GENERAL = 'chatGeneral';
 const LENGTH_MIN_USERNAME = 3;
 const EMPTY = 0;
@@ -16,7 +16,10 @@ const LITERAL = {
   uploadSuccess: 'El fichero se ha subido y se esta compartiendo correctamente',
 };
 
-// Cerramos el chat
+/** 
+ * @description Cierra una sala de chat privada
+ * @param {string} selectorID ID de la sala a cerrar
+ */
 const closeChat = selectorID => {
   document.querySelector(`.tabs ul li[data-content='${selectorID}']`).removeEventListener('click', selectedChat);
   document.querySelector(`.tabs ul li[data-content='${selectorID}']`).remove();
@@ -24,7 +27,10 @@ const closeChat = selectorID => {
   document.querySelector(`li[data-content='chatGeneral']`).click();
 };
 
-// Crear la pestaña y añadir el texto en el chat de cada uno
+/** 
+ * @description Creamos una sala privada
+ * @param {object} data Información para crear la sala
+ */
 const chatTo = data => {
   const selectorID = data.idHTML || data.idOrigenHTML;
   const selectorIdUser = data.idUser ||data.idOrigen;
@@ -68,7 +74,10 @@ const chatTo = data => {
   }
 };
 
-// Seleccionar el chat para hablar
+/** 
+ * @description Seleccionar una sala para charlar
+ * @param {object} evt Evento implicito en la acción ejecutada
+ */
 const selectedChat = evt => {
   document.querySelectorAll('.containerChats .chat').forEach(item => {
     item.classList.add('hide');
@@ -85,7 +94,11 @@ const selectedChat = evt => {
   }
 };
 
-// Envia mensajes al chat general y a un usuario privado
+/** 
+ * @description Envia mensajes al chat general y a un usuario privado
+ * @param {object} evt Evento implicito en la acción ejecutada
+ * @param {boolean} status Indicamos el estado para saber que usuario esta escribiendo
+ */
 const sendMessage = (evt, status) => {
   if (evt.key === 'Enter') {
     if (user.value.length >= LENGTH_MIN_USERNAME && message.value.trim().length > EMPTY) {
@@ -128,12 +141,18 @@ const sendMessage = (evt, status) => {
   }
 };
 
-// Muestra texto indicando quien esta escribiendo
+/** 
+ * @description Muestra texto indicando quien esta escribiendo
+ * @param {object} payload Información que pinta cuando pulsamos un tecla
+ */
 const clientBeenWriting = payload => {
   document.querySelector('.containerChats .infoInput').innerHTML = payload;
 };
 
-// Añade en el chat general los mensajes
+/** 
+ * @description Muestra texto en el chat general
+ * @param {object} data Información relativa al usuario
+ */
 const reciveMessage = data => {
   const {
     color,
@@ -166,7 +185,10 @@ const reciveMessage = data => {
   }
 };
 
-// Añade y actualiza el panel lateral con el listado de los usuarios
+/** 
+ * @description Añade y actualiza el panel lateral con el listado de los usuarios
+ * @param {object} payload Información de cada uno de los usuarios
+ */
 const registerUser = payload => {
   Array.from(usersPanel.children).forEach(item => item.remove())
   payload.forEach(item => {
@@ -185,7 +207,11 @@ const registerUser = payload => {
   });
 };
 
-// Muestra mensaje de error al registrar el usuario
+/** 
+ * @description Muestra mensaje de error al registrar el usuario
+ * @param {object} payload Información de cada uno de los usuarios
+ * @param {object} evt Evento implicito en la acción ejecutada
+ */
 const errorRegisteredUser = (payload, evt) => {
   const { error } = payload;
   notify(error, 'danger');
@@ -193,7 +219,10 @@ const errorRegisteredUser = (payload, evt) => {
   user.classList.add('has-background-danger');
 };
 
-// Realiza la conexion al servidor
+/** 
+ * @description Realiza la conexion al servidor
+ * @param {object} evt Evento implicito en la acción ejecutada
+ */
 const connectedToServer = evt => {
   const target = evt.target;
   if (target.value.length >= LENGTH_MIN_USERNAME) {
@@ -212,7 +241,10 @@ const connectedToServer = evt => {
   }
 };
 
-// Mostramos el progreso de la subida
+/** 
+ * @description Mostramos el progreso de la subida
+ * @param {object} data Información sobre la subida del archivo
+ */
 const uploadProgress = data => {
   const { recived, total, who } = data;
   const porcent = Math.floor((recived * 100) / total);
@@ -225,7 +257,10 @@ const uploadProgress = data => {
   infoProgress.innerHTML = `${currentlySize.toFixed(2)} MB ${totalSize.toFixed(2)} MB ${porcent} %`;
 };
 
-// Cargamos un fichero y se sube al servidor
+/** 
+ * @description Cargamos un fichero y se sube al servidor
+ * @param {object} evt Evento implicito en la acción ejecutada
+ */
 const upload = async evt => {
   if (user.value.length >= LENGTH_MIN_USERNAME) {
     const uploadProgress = document.querySelector('#containerProgress');
@@ -260,7 +295,9 @@ const upload = async evt => {
   }
 };
 
-// Carga inicial
+/** 
+ * @description Inicialización del chat
+ */
 const load = () => {
   const tabGeneral = document.querySelector('#tabGeneral');
   user = document.querySelector('#user');
@@ -275,7 +312,12 @@ const load = () => {
   uploadFile.addEventListener('change', upload);
 };
 
-// Muestra notificaciones
+/** 
+ * @description Muestra notificaciones en el chat
+ * @param {string} msn Mensaje que se muestra en la notificación
+ * @param {string} type Tipo de mensaje (danger, info, success, warning)
+ * @param {number} timeout Duración de la notificación
+ */
 const notify = (msn = '', type = 'info', timeout = 2000) => {
   notification.children[0].innerHTML = msn;
   notification.classList.add(`is-${type}`);
@@ -286,7 +328,12 @@ const notify = (msn = '', type = 'info', timeout = 2000) => {
   }, timeout);
 };
 
-// Generamos un ID para cada usuario
+/** 
+ * @description Generamos un ID para cada usuario
+ */
 const generateIDHtml = () => new Date().getTime().toString().split('').map(i => String.fromCharCode(parseInt(i) + 65)).join('');
 
+/** 
+ * @description Espera a que este la página completamente cargada
+ */
 document.addEventListener("DOMContentLoaded", load);
