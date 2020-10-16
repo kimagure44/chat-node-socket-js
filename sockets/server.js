@@ -1,3 +1,6 @@
+/**
+ * @URL {get} http://tecnops.es:13257/
+ */
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
@@ -5,10 +8,16 @@ const io = require('socket.io')(http);
 const formidable = require('formidable');
 const path = require('path');
 const PORT = process.PORT || 13257;
+
+/** 
+ * @description Muestra el puerto donde se ha iniciado la aplicación
+ */
 const showPort = () => `listening on *:${PORT}`;
+
+// Definición de constantes y variables para la gestión del chat
 let users = [];
-const chats = [];
 let who = null;
+const chats = [];
 const MAX_FILE_SIZE_MB = 0.3;
 const MAX_FILE_LENGTH = 17;
 const MIME_TYPE = [
@@ -21,14 +30,24 @@ const LITERAL = {
   maxSize: `El fichero no puede tener un tamaño superior a <b>${MAX_FILE_SIZE_MB} MB</b> y/o no debe exceder de <b>${MAX_FILE_LENGTH}</b> caracteres`,
 };
 
-// Generamos un nuevo color
+/** 
+ * @description Nos devuelve un valor hexadecimal para generar colores aleatorios
+ * @return {number} Valor decimal del color
+ */
 const hex = () => (Math.floor(Math.random() * 130) + 125).toString(16);
+
+/** 
+ * @description Nos devuelve el color hexadecimal completo (RGB)
+ * @return {string}
+ */
 const newColor = () => `#${hex()}${hex()}${hex()}`;
 
 // Para servir los ficheros de la carpeta 'public'
 app.use(express.static(`${__dirname}/public`));
 
-// Endpoint para la subida de ficheros
+/** 
+ * @description Endpoint para la subida de documentos
+ */
 app.post('/upload-file', (req, res) => {
   let fileName = '';
   let error = true;
@@ -60,7 +79,12 @@ app.post('/upload-file', (req, res) => {
   })
 });
 
-// Realizamos la conexión y validación del usuario
+/** 
+ * @description Método que se dispara cuando realizamos la conexión del usuario. Aquí realizamos la conexión y validación del usuario
+ * @param {object} payload Datos del usuario
+ * @param {object} El socket generado por el evento que dispara cuando se realiza la conexión
+ * @param {string} Color del usuario
+ */
 const connection = async (payload, socket, color) => {
   const idUser = socket.id;
   const { user } = payload;
@@ -77,24 +101,38 @@ const connection = async (payload, socket, color) => {
   }
 };
 
-// Realizamos la desconexión del usuario y su borrado
+/** 
+ * @description Método que se dispara cuando realizamos la desconexión del usuario (Recargar y nuevo acceso). Aquí realizamos la desconexión
+ * @param {object} El socket generado por el evento que dispara cuando se realiza la conexión
+ */
 const closeConnection = socket => {
   users = [...users.filter(item => item.idUser !== socket.id)];
   io.emit('registered-user', users);
 };
 
-// Mostramos mensaje informando del usuario que esta escribiendo actualmente
+/** 
+ * @description Método que se dispara cuando escribimos en nuestro chat. Aquí emitimos la información de quien esta escribiendo
+ * @param {object} payload Datos del usuario
+ */
 const writeClient = payload => {
   const { data } = payload;
   io.emit('client-been-writing', data ? `El usuario ${data} esta escribiendo...` : '');
 };
 
-// Informamos quien esta subido
+/** 
+ * @description Método que se dispara cuando subimos un fichero. Aquí almacenamos temporalmente el usuario que esta subiendo un archivo
+ * @param {object} payload Datos del usuario
+ */
 const whoUpload = payload => {
   who = payload.idUser;
 };
 
-// Gestión mensajes en el chat general
+/** 
+ * @description Método que se dispara cuando enviamos un mensaje. Desde aquí gestionamos el envio de mensajes a un usuario privado o al chat público
+ * @param {object} payload Datos del usuario
+ * @param {string} color Color del usuario
+ * @param {string} type Indicamos si es un chat privado o no
+ */
 const messageChat = (payload, color, type) => {
   const newData = {...payload, color};
   chats.push(newData);
@@ -105,7 +143,10 @@ const messageChat = (payload, color, type) => {
   }
 };
 
-// Evento que se dispara cunado se realiza la conexión
+/** 
+ * @description Evento que se dispara cuando se realiza la conexión
+ * @param {object} El socket generado por el evento que dispara cuando se realiza la conexión
+ */
 io.on('connection', socket => {
   let idUser = null;
   const color = newColor();
