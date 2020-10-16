@@ -6,4 +6,4 @@ El chat tiene las siguientes características:
   - Aviso mediante icono de nuevos mensajes en cualquier sala, tanto privada como pública.
   - Subida de ficheros al chat y publicación del fichero para su descarga y/o visualización.
 
-Usar el siguiente comando para ejecutar el Chat: node ./sockets/server.js
+Usar el siguiente comando para ejecutar el Chat: **node ./sockets/server.js**
