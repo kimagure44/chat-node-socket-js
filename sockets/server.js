@@ -10,7 +10,8 @@ const showPort = () => `listening on *:${PORT}`;
 let users = [];
 const chats = [];
 let who = null;
-const MAX_FILE_SIZE_MB = 0.5;
+const MAX_FILE_SIZE_MB = 0.3;
+const MAX_FILE_LENGTH = 17;
 const MIME_TYPE = [
   'image/gif',
   'image/jpeg',
@@ -18,7 +19,7 @@ const MIME_TYPE = [
 ];
 const LITERAL = {
   fileNotAllowed: `El fichero que intenta subir no esta permitido. Los tipos permitidos son los siguientes: <b>[${MIME_TYPE.join(', ')}]</b>`,
-  maxSize: `El fichero no puede tener un tamaño superior a <b>${MAX_FILE_SIZE_MB} MB</b>`
+  maxSize: `El fichero no puede tener un tamaño superior a <b>${MAX_FILE_SIZE_MB} MB</b> y/o no debe exceder de <b>${MAX_FILE_LENGTH}</b> caracteres`,
 };
 
 // Generamos un nuevo color
@@ -37,7 +38,8 @@ app.post('/upload-file', (req, res) => {
   });
   form.parse(req);
   form.on('fileBegin',(field, file) => {
-    if (MIME_TYPE.includes(file.type)) {
+    console.log(file, field);
+    if (MIME_TYPE.includes(file.type) && file.type.length < 20) {
       file.path = path.join(__dirname, '../public/upload-file', file.name);
       fileName = file.name;
       error = false;
@@ -54,7 +56,7 @@ app.post('/upload-file', (req, res) => {
     io.to(who).emit('upload-progress', { recived: bytesReceived, total: bytesExpected, who });
     console.log(bytesReceived, bytesExpected);
   });
-  form.on('error', error => {
+  form.on('error', () => {
     res.status(404).send({ statusCode: 404, statusMessage: LITERAL.maxSize, path: null });
   })
 });
